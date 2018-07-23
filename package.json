@@ -1,0 +1,22 @@
+{
+  "name": "tw-js-webpack-utils",
+  "version": "1.0.0",
+  "description": "A set of scripts to facilitate development and bundling of ReactJS apps with Webpack.",
+  "main": "bin/webpack-config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TruewindIT/tw-js-webpack-utils.git"
+  },
+  "keywords": [
+    "truewind"
+  ],
+  "author": "Nuno Leong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TruewindIT/tw-js-webpack-utils/issues"
+  },
+  "homepage": "https://github.com/TruewindIT/tw-js-webpack-utils#readme"
+}
