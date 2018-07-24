@@ -18,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/TruewindIT/tw-js-webpack-utils/issues"
   },
-  "homepage": "https://github.com/TruewindIT/tw-js-webpack-utils#readme"
+  "homepage": "https://github.com/TruewindIT/tw-js-webpack-utils#readme",
+  "devDependencies": {
+    "babel-eslint": "8.2.6",
+    "eslint": "5.2.0",
+    "eslint-plugin-react": "7.10.0"
+  }
 }

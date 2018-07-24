@@ -2,11 +2,11 @@ import crypto from 'crypto';
 
 const secret = 'This is a secret. Tell me more...';
 
-export const project = {
+const project = {
     name: 'project'
 };
 
-export const apps = [
+const apps = [
     {
         name: 'app1',
         wdsProtocol: 'http',
@@ -21,7 +21,7 @@ export const apps = [
     }
 ];
 
-export const getEnv = (app, targetEnv) => {
+const getEnv = (app, targetEnv) => {
     let envConfig = {
         AppEnv: targetEnv,
         AssetsPath: 'assets/',
@@ -73,3 +73,36 @@ export const getEnv = (app, targetEnv) => {
 
     return envConfig;
 };
+
+ const getPluginOptions = (plugin, app, targetEnv) => {
+    switch (plugin) {
+        case 'CopyWebpackPlugin': // this is an array of objects. if we return null, this plugin will not be added to webpack
+            return [
+                { from: `./Client/src/${app.name}/locales`, to: 'locales' },
+                { from: './node_modules/tinymce/skins', to: 'skins' }
+            ];
+        case 'HtmlWebpackPlugin': // this is an object, it will be "spread" to the default object
+            return {
+                inject: false
+            };
+        case 'DefinePlugin': // this is an object, it will be "spread" to the default object
+            return {
+                option: 'value'
+            };
+        case 'MiniCssExtractPlugin': // this is an object, it will be "spread" to the default object
+            return {
+                option: 'value'
+            };
+        default:
+            break;
+    }
+    return null;
+};
+
+const BuildConfig = {
+    project,
+    apps,
+    getEnv,
+    getPluginOptions
+};
+module.exports = BuildConfig;

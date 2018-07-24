@@ -5,6 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BuildConfig = require('../../../build.config.js');
 
 // grab .babelrc and set es2015: modules to false (essentially disabling "commonjs modules" for webpack execution)
@@ -108,8 +109,12 @@ const getWebPackConfig = (options) => {
 
 
     /** ************* DEFINE PLUGINS *******************/
+    const HtmlWebpackPluginOptions = BuildConfig.getPluginOptions('HtmlWebpackPlugin', targetApp, targetEnv);
+    const DefinePluginOptions = BuildConfig.getPluginOptions('DefinePlugin', targetApp, targetEnv);
+    const MiniCssExtractPluginOptions = BuildConfig.getPluginOptions('MiniCssExtractPlugin', targetApp, targetEnv);
+
     let cfgPlugins = [
-        new HtmlWebpackPlugin({
+        new HtmlWebpackPlugin(Object.assign({}, {
             template: `./Client/src/${targetAppName}/index.template.ejs`,
             favicon: `./Client/src/${targetAppName}/assets/images/favicon.ico`,
             environment: targetEnv,
@@ -126,20 +131,27 @@ const getWebPackConfig = (options) => {
                 minifyURLs: true
             },
             inject: true
-        }),
-        new webpack.DefinePlugin({
+        }, HtmlWebpackPluginOptions)),
+        new webpack.DefinePlugin(Object.assign({}, {
             'process.env': {
                 NODE_ENV: JSON.stringify(nodeEnv),
                 ENV_CONFIG: JSON.stringify(envConfig)
             }
-        }),
-        new MiniCssExtractPlugin({
+        }, DefinePluginOptions)),
+        new MiniCssExtractPlugin(Object.assign({}, {
             // Options similar to the same options in webpackOptions.output
             // both options are optional
             filename: debug ? '[name].css' : '[name].[hash].css',
             chunkFilename: debug ? '[id].css' : '[id].[hash].css'
-        })
+        }, MiniCssExtractPluginOptions))
     ];
+
+    const CopyWebpackPluginOptions = BuildConfig.getPluginOptions('CopyWebpackPlugin', targetApp, targetEnv);
+    if (CopyWebpackPlugin) {
+        cfgPlugins = cfgPlugins.concat([
+            new CopyWebpackPlugin(CopyWebpackPluginOptions)
+        ]);
+    }
 
     if (debug) {
         cfgPlugins = cfgPlugins.concat([
@@ -262,6 +274,5 @@ const getWebPackConfig = (options) => {
 
     return config;
 };
-
 
 module.exports = getWebPackConfig;
