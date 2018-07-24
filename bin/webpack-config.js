@@ -220,7 +220,14 @@ const getWebPackConfig = (options) => {
         use: [
             debug ? 'style-loader' : MiniCssExtractPlugin.loader,
             cssLoaderCfg,
-            'postcss-loader'
+            {
+				loader: 'postcss-loader',
+				options: {
+					config: {
+						path: theDirname
+					}
+				}
+			}
         ]
     };
 
