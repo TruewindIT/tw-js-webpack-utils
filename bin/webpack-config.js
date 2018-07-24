@@ -147,7 +147,7 @@ const getWebPackConfig = (options) => {
     ];
 
     const CopyWebpackPluginOptions = BuildConfig.getPluginOptions('CopyWebpackPlugin', targetApp, targetEnv);
-    if (CopyWebpackPlugin) {
+    if (CopyWebpackPluginOptions) {
         cfgPlugins = cfgPlugins.concat([
             new CopyWebpackPlugin(CopyWebpackPluginOptions)
         ]);
