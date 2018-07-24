@@ -47,6 +47,6 @@ const parseArgs = (argv, buildConfig) => {
 
 const Common =  {
 	parseArgs
-}
+};
 
 module.exports = Common;
