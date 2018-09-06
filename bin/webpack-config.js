@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -8,23 +7,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BuildConfig = require('../../../build.config.js');
 
-// grab .babelrc and set es2015: modules to false (essentially disabling "commonjs modules" for webpack execution)
-// this will allow webpack to perform tree shaking optimization
-// TODO NL 2017-08-09: don't know if this is working properly. Needs further investigation
-const babelrcJson = JSON.parse(fs.readFileSync('.babelrc'));
-const babelrc = {
-    ...babelrcJson,
-    babelrc: false
-};
-
 const theDirname = path.resolve(`${__dirname}/../../..`);
-
-babelrc.presets.forEach((preset, index) => {
-    if (preset === 'es2015') {
-        babelrc.presets[index] = ['es2015', { 'modules': false }];
-        return;
-    }
-});
 
 const getWebPackConfig = (options) => {
     const projectName = BuildConfig.project.name;
@@ -260,8 +243,7 @@ const getWebPackConfig = (options) => {
                     exclude: /(node_modules|bower_components)/,
                     use: [
                         {
-                            loader: 'babel-loader',
-                            options: babelrc
+                            loader: 'babel-loader'
                         }
                     ]
                 },
