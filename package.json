@@ -1,6 +1,6 @@
 {
   "name": "tw-js-webpack-utils",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A set of scripts to facilitate development and bundling of ReactJS apps with Webpack.",
   "main": "bin/webpack-config.js",
   "scripts": {
@@ -33,8 +33,8 @@
     "@babel/preset-env": "7.0.0",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.0.0",
-    "babel-eslint": "9.0.0-beta.3",
-    "babel-loader": "8.0.0-beta.4",
+    "babel-eslint": "9.0.0",
+    "babel-loader": "8.0.2",
     "css-loader": "1.0.0",
     "copy-webpack-plugin": "4.5.2",
     "file-loader": "1.1.11",
