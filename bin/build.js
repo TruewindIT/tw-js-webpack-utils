@@ -35,21 +35,19 @@ const webpackArgs = [
 ];
 
 function build(app) {
-    return new Promise((resolve, reject) => {
-        del.sync([`${targetBaseDir}/Client/dist/${app.name}`], { force: true });
+	del.sync([`${targetBaseDir}/Client/dist/${app.name}`], { force: true });
 
-        theConsole.log(`******************** Begin building ${app.name} ******************** `);
-        runScript('./node_modules/webpack/bin/webpack.js', webpackArgs.concat([app.name]),
-            (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    theConsole.log(`******************** Finished building ${app.name} ******************** `);
-                    resolve();
-                }
-            }
-        );
-    });
+	theConsole.log(`******************** Begin building ${app.name} ******************** `);
+	runScript('./node_modules/webpack/bin/webpack.js', webpackArgs.concat([app.name]),
+		(err) => {
+			if (err) {
+				theConsole.log(`******************** Build failed! ${app.name} ******************** `);
+				throw err;
+			} else {
+				theConsole.log(`******************** Finished building ${app.name} ******************** `);
+			}
+		}
+	);
 }
 
 

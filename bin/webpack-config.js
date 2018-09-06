@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -7,24 +6,9 @@ const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BuildConfig = require('../../../build.config.js');
-
-// grab .babelrc and set es2015: modules to false (essentially disabling "commonjs modules" for webpack execution)
-// this will allow webpack to perform tree shaking optimization
-// TODO NL 2017-08-09: don't know if this is working properly. Needs further investigation
-const babelrcJson = JSON.parse(fs.readFileSync('.babelrc'));
-const babelrc = {
-    ...babelrcJson,
-    babelrc: false
-};
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const theDirname = path.resolve(`${__dirname}/../../..`);
-
-babelrc.presets.forEach((preset, index) => {
-    if (preset === 'es2015') {
-        babelrc.presets[index] = ['es2015', { 'modules': false }];
-        return;
-    }
-});
 
 const getWebPackConfig = (options) => {
     const projectName = BuildConfig.project.name;
@@ -93,7 +77,7 @@ const getWebPackConfig = (options) => {
     };
 
     /** ************* DEFINE ENTRY *******************/
-    let cfgEntry = [];
+    let cfgEntry = ['@babel/polyfill'];
 
     if (debug) {
         cfgEntry = cfgEntry.concat([
@@ -103,8 +87,8 @@ const getWebPackConfig = (options) => {
         ]);
     }
 
-    cfgEntry = cfgEntry.concat([
-        `./Client/src/${targetAppName}/Index.jsx`
+    cfgEntry = cfgEntry.concat([		
+        `./Client/src/${targetAppName}/Index.tsx`
     ]);
 
 
@@ -143,7 +127,11 @@ const getWebPackConfig = (options) => {
             // both options are optional
             filename: debug ? '[name].css' : '[name].[hash].css',
             chunkFilename: debug ? '[id].css' : '[id].[hash].css'
-        }, MiniCssExtractPluginOptions))
+        }, MiniCssExtractPluginOptions)),
+		new ForkTsCheckerWebpackPlugin({
+			async: false,
+			tslint: true
+		})
     ];
 
     const CopyWebpackPluginOptions = BuildConfig.getPluginOptions('CopyWebpackPlugin', targetApp, targetEnv);
@@ -188,21 +176,6 @@ const getWebPackConfig = (options) => {
     }
 
     /** ******** DEFINE MODULE RULES **************/
-    const esLintRule = {
-        test: /\.js(x)?$/,
-        exclude: /node_modules/,
-        enforce: 'pre',
-        use: [{
-            loader: 'eslint-loader',
-            options: {
-                configFile: '.eslintrc',
-                failOnWarning: true,
-                failOnError: true,
-                fix: true
-            }
-        }]
-    };
-
     const cssLoaderCfg = {
         loader: 'css-loader',
         options: {
@@ -245,9 +218,9 @@ const getWebPackConfig = (options) => {
     /** ******** DEFINE CONFIG **************/
     const config = {
         mode: nodeEnv,
-        devtool: debug ? 'inline-sourcemap' : false,
+        devtool: debug ? 'source-map' : false,
         resolve: {
-            extensions: ['.js', '.jsx']
+            extensions: ['.ts', '.tsx', '.js']
         },
         entry: cfgEntry,
         output: output,
@@ -256,15 +229,19 @@ const getWebPackConfig = (options) => {
         module: {
             rules: [
                 {
-                    test: /\.(jsx)?$/,
+                    test: /\.(tsx)?$/,
                     exclude: /(node_modules|bower_components)/,
                     use: [
                         {
-                            loader: 'babel-loader',
-                            options: babelrc
+                            loader: 'babel-loader'
                         }
                     ]
                 },
+                {
+                    test: /\.js$/,
+                    use: ['source-map-loader'],
+                    enforce: 'pre'
+                  },
                 cssRule,
                 { test: /\.eot(\?\S*)?$/, use: [defaultUrlLoader(null, `${envConfig.AssetsPath}fonts/`)] },
                 { test: /\.woff2(\?\S*)?$/, use: [defaultUrlLoader('application/font-woff2', `${envConfig.AssetsPath}fonts/`)] },
@@ -277,7 +254,7 @@ const getWebPackConfig = (options) => {
         }
     };
 
-    config.module.rules.push(esLintRule);
+    // config.module.rules.push(lintRule);
 
     return config;
 };
