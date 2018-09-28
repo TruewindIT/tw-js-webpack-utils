@@ -1,6 +1,6 @@
 {
   "name": "tw-js-webpack-utils",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A set of scripts to facilitate development and bundling of ReactJS apps with Webpack.",
   "main": "bin/webpack-config.js",
   "scripts": {
@@ -37,10 +37,12 @@
     "babel-loader": "8.0.2",
     "css-loader": "1.0.0",
     "copy-webpack-plugin": "4.5.2",
+    "del": "3.0.0",    
     "file-loader": "1.1.11",
     "fork-ts-checker-webpack-plugin" : "0.4.8",
     "html-webpack-plugin": "3.2.0",
     "mini-css-extract-plugin": "0.4.1",
+    "minimist": "1.2.0",
     "optimize-css-assets-webpack-plugin": "5.0.0",
     "postcss-loader": "3.0.0",
     "postcss-scss": "2.0.0",
