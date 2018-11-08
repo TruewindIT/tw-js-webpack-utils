@@ -1,6 +1,6 @@
 {
   "name": "tw-js-webpack-utils",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "A set of scripts to facilitate development and bundling of ReactJS apps with Webpack.",
   "main": "bin/webpack-config.js",
   "scripts": {
@@ -59,7 +59,7 @@
     "url-loader": "1.0.1",
     "webpack": "4.16.5",
     "webpack-cli": "3.1.0",
-    "webpack-dev-server": "3.1.5"
+    "webpack-dev-server": "3.1.6"
   },
   "devDependencies": {}
 }
