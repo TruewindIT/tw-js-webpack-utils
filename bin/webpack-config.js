@@ -35,11 +35,11 @@ const getWebPackConfig = (options) => {
     const {wdsProtocol, wdsHost, wdsPort, name: targetAppName} = targetApp;
     const targetPath = targetBaseDir + `/Client/dist/${targetAppName}`;
 
-    if (targetEnv !== 'local' && targetEnv !== 'development' && targetEnv !== 'quality' && targetEnv !== 'production') {
+    if (!targetEnv.startsWith('local') && !targetEnv.startsWith('development') && !targetEnv.startsWith('quality') && !targetEnv.startsWith('production')) {
         throw new Error(`Invalid target environment (targetEnv) specified:${targetEnv}`);
     }
 
-    const debug = targetEnv !== 'quality' && targetEnv !== 'production';
+    const debug = !targetEnv.startsWith('quality') && !targetEnv.startsWith('production');
     const nodeEnv = debug ? 'development' : 'production';
 
     /** ************** DEFINE ENV CONFIG *************/
